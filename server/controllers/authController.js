@@ -1,7 +1,10 @@
 import bcrypt from "bcryptjs"; // For Password bcrypt
 import jsonwebtoken  from "jsonwebtoken"; // for create Authentication token
 import userModel from "../models/userModel.js";
+
+
 export const register = async (req, res) => {
+  
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
     return res.json({ success: false, message: "Missing Details" });
@@ -35,8 +38,11 @@ export const register = async (req, res) => {
   }
 };
 
+
+
 export const login = async (req, res) => {
   const { email, password } = req.body;
+  
   if (!email || !password) {
     return res.json({
       success: false,
