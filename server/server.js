@@ -4,6 +4,7 @@ import "dotenv/config";
 import cookieParser from "cookie-parser";
 import connectDB from "./Config/mongodb.js";
 import authRouter from "./Routes/authRoute.js";
+import userRouter from "./Routes/userRoutes.js";
 const app = express();
 const port = process.env.PORT || 4000;
 connectDB();
@@ -19,6 +20,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRouter);
+app.use("/api/user", userRouter);
 
 app.listen(port, () => {
   console.log(`Running On ${port}`);
