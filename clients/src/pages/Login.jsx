@@ -1,13 +1,64 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { assets } from "../assets/assets";
-import { useNavigate } from "react-router-dom";
-
+import { data, useNavigate } from "react-router-dom";
+import { AppContent } from "../context/AppContext";
+import { toast } from "react-toastify";
+import axios from "axios";
 const Login = () => {
   const navigate = useNavigate();
+  const { backendUrl, setIsLoggedin, getUserData } = useContext(AppContent);
   const [state, setState] = useState("Sign Up");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  console.log(name);
+  console.log(email);
+  console.log(password);
+
+  const onSubmitHandler = async (event) => {
+    try {
+      event.preventDefault();
+      axios.defaults.withCredentials = true;
+      if (state === "Sign Up") {
+        const { data } = await axios.post(backendUrl + "/api/auth/register", {
+          name,
+          email,
+          password,
+        });
+        console.log("register user data" + data);
+
+        if (data.success) {
+          setIsLoggedin(true);
+          getUserData();
+          navigate("/");
+        } else {
+          alert(data.mesage);
+          // toast.error(data.mesage);
+        }
+      } else {
+        const { data } = await axios.post(backendUrl + "/api/auth/login", {
+          email,
+          password,
+        });
+        console.log("Login data" + data);
+
+        if (data.success) {
+          setIsLoggedin(true);
+          getUserData();
+          navigate("/");
+        } else {
+          // toast.error(data.mesage);
+          alert(data.mesage);
+        }
+      }
+    } catch (error) {
+      alert(data.mesage);
+      // toast.error(data.mesage);
+    }
+  };
+
+
+
   return (
     <div className="w-full flex justify-center flex-col items-center min-h-screen md:pt-28 pt-20 px-4 md:px-6 bg-gradient-to-br from-blue-200 to-purple-400">
       <div className="bg-slate-900 p-10 rounded-lg shadow-lg w-full sm:w-96 text-indigo-300 text-sm">
@@ -20,52 +71,51 @@ const Login = () => {
             : "Login to your Acccount!"}
         </p>
 
-        <form>
-          <div
-            className={`${
-              state === "Sign Up"
-                ? "flex items-center gap-3 py-2 px-6 bg-black rounded-full"
-                : "hidden"
-            }`}
-          >
-            <img src={assets.person_icon} alt="" className="" />
-            <input
-              type="text"
-              onChange={(event) => {
-                setName(event.target.value);
-              }}
-              value={name}
-              required
-              placeholder="Full Name"
-              className="p-1 bg-transparent outline-none text-white"
-            />
-          </div>
+        <form onSubmit={onSubmitHandler}>
+          {state === "Sign Up" && (
+            <div className="flex items-center gap-3 py-2 px-6 bg-black rounded-full">
+              <img src={assets.person_icon} alt="" />
+              <input
+                type="text"
+                name="name"
+                autocomplete="off"
+                onChange={(event) => setName(event.target.value)}
+                value={name}
+                placeholder="Full Name"
+                className="p-1 bg-transparent outline-none text-white"
+                required
+              />
+            </div>
+          )}
           <div className="flex items-center my-3 gap-3 py-2 px-6 bg-black rounded-full">
-            <img src={assets.mail_icon} alt="" className="" />
+            <img src={assets.mail_icon} alt="" />
             <input
               type="email"
-              required
+              autocomplete="off"
+              name="email"
               onChange={(event) => setEmail(event.target.value)}
               value={email}
               placeholder="Email Id"
               className="p-1 bg-transparent outline-none text-white"
+              required
             />
           </div>
           <div className="flex items-center gap-3 py-2 px-6 bg-black rounded-full">
-            <img src={assets.lock_icon} alt="" className="" />
+            <img src={assets.lock_icon} alt="" />
             <input
               type="password"
-              required
-              onChange={(event) => {
-                setPassword(event.target.value);
-              }}
+              autocomplete="off"
+              name="password"
+              onChange={(event) => setPassword(event.target.value)}
               value={password}
-              placeholder="Enter Password "
+              placeholder="Enter Password"
               className="p-1 bg-transparent outline-none text-white"
+              required
             />
           </div>
-          <p className="my-2 text-center text-indigo-300 cursor-pointer"
-          onClick={()=>{navigate("/reset-password")}}
+          <p
+            className="my-2 text-center text-indigo-300 cursor-pointer"
+            onClick={() => navigate("/reset-password")}
           >
             Forget Password?
           </p>

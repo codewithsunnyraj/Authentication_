@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { assets } from "../assets/assets";
+import { AppContent } from "../context/AppContext";
 const Header = () => {
+  const {userData} = useContext(AppContent)
   return (
     <div className="w-full md:pt-28 pt-20 px-4 md:px-6">
       <div className="flex items-center justify-center flex-col">
@@ -8,7 +10,7 @@ const Header = () => {
           <img src={assets.header_img} className="md:w-40 w-32 rounded-full" alt="" />
         </div>
         <div className="flex items-center gap-3">
-          <h1 className="md:text-3xl text-xl font-bold">Hey Developer </h1>
+          <h1 className="md:text-3xl text-xl font-bold">Hey {userData ? userData.name : "Developer"}!  </h1>
           <img src={assets.hand_wave} alt="" className=" md:w-10 w-8" />
         </div>
         <div>

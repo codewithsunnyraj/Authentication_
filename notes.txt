@@ -1,0 +1,14 @@
+useContext hook, which allows developers to easily share data across multiple components without the need for prop drilling.
+
+
+3. Why useContext is Important
+Sharing Data Across Components
+One of the main benefits of using context is the ability to share data across multiple components. This is especially useful when dealing with data that needs to be accessed by several components at different levels of the component tree.
+
+
+
+
+
+
+//Dot
+  axios.defaults.withCredentials = true;(It will send cookie also with this request)
