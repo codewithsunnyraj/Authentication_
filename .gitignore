@@ -17,7 +17,6 @@ dist-ssr/
 server/.env
 clients/.env
 
-
 # Editor directories and files
 .vscode/
 .idea/
